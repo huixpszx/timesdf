@@ -1,5 +1,0 @@
-rsa_private_key.pem和rsa_public_key.pem是商户名为APITEST的密钥对
-
-用私钥签名，公钥可自己验证签名正确性
-
-kuaifu_pub.pem用于验证平台回调的正确性，注意是用平台公钥验证，不是用自己的公钥验证

@@ -14,6 +14,8 @@ class SdkDf
     {
         $config = ConfigChid::ConfigTimes();
         $balance_pay = $config['balance_pay'];
+        $www = '';
+        $privKey_path = $config['privyKey_path'];
         if(!str_contains($balance_pay, 'http')){
             return '需要在ConfigChid文件，正确的支付域名';
         }
@@ -21,7 +23,7 @@ class SdkDf
             'chid' => $config['chid'],
             'timeamp' => time(),
         ];
-        $my_self['sign'] = Method::Sign($my_self,$config['agent_key'],$config['privyKey_path']);
+        $my_self['sign'] = Method::Sign($my_self,$config['agent_key'],$privKey_path);
         return Method::Send_post_from($balance_pay,$my_self);
     }
 
