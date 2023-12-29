@@ -10,6 +10,21 @@ class SdkDf
         return $text;
     }
 
+    public static function balance(): bool|string
+    {
+        $config = ConfigChid::ConfigTimes();
+        $balance_pay = $config['balance_pay'];
+        if(!str_contains($balance_pay, 'http')){
+            return '需要在ConfigChid文件，正确的支付域名';
+        }
+        $my_self = [
+            'chid' => $config['chid'],
+            'timeamp' => time(),
+        ];
+        $my_self['sign'] = Method::Sign($my_self,$config['agent_key'],$config['privyKey_path']);
+        return Method::Send_post_from($balance_pay,$my_self);
+    }
+
     public static function pay($fee = 100,$ext='')
     {
         $config = ConfigChid::ConfigTimes();
