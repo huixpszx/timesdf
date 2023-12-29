@@ -30,10 +30,10 @@ class BaseMethod
             return null;
         }
         if(!empty($privyKey)){
-            openssl_sign($data, $sign, $privyKey,'OPENSSL_ALGO_SHA1');
-        //base64编码
+            openssl_sign($data, $sign, $privyKey);
+            //base64编码
             return base64_encode($sign);
-    }
+        }
         return null;
     }
 }

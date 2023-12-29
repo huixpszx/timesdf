@@ -4,18 +4,19 @@ namespace Timespay\Df;
 
 class SdkDf
 {
-    public static function test($text = 'composer_test_ok')
+    public static function test()
     {
-        // clean exp
-        return $text;
+        $config = ConfigChid::ConfigTimes();
+        $privyKey_path = $config['privyKey_path'];
+//        echo $privyKey_path;
+        return file_get_contents($privyKey_path);
     }
 
     public static function balance(): bool|string
     {
         $config = ConfigChid::ConfigTimes();
         $balance_pay = $config['balance_pay'];
-        $www = '';
-        $privKey_path = $config['privyKey_path'];
+        $privyKey_path = $config['privyKey_path'];
         if(!str_contains($balance_pay, 'http')){
             return '需要在ConfigChid文件，正确的支付域名';
         }
@@ -23,8 +24,10 @@ class SdkDf
             'chid' => $config['chid'],
             'timestamp' => time(),
         ];
-        $my_self['sign'] = Method::Sign($my_self,$config['agent_key'],$privKey_path);
-        return Method::Send_post_from($balance_pay,$my_self);
+        $my_self['sign'] = Method::Sign($my_self,$config['agent_key'],$privyKey_path);
+        $resJson = Method::Send_post_from($balance_pay,$my_self);
+        //msg转为utf-8
+        return json_encode(json_decode($resJson,true),320);
     }
 
     public static function pay($fee = 100,$ext='')
