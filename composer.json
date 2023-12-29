@@ -1,6 +1,6 @@
 {
-    "name": "timespay/df",
-    "description": "df",
+    "name": "timespay/dfsdk",
+    "description": "dfsdk",
     "type": "project",
     "license": "MIT",
     "autoload": {
