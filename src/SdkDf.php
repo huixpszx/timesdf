@@ -21,7 +21,7 @@ class SdkDf
         }
         $my_self = [
             'chid' => $config['chid'],
-            'timeamp' => time(),
+            'timestamp' => time(),
         ];
         $my_self['sign'] = Method::Sign($my_self,$config['agent_key'],$privKey_path);
         return Method::Send_post_from($balance_pay,$my_self);
