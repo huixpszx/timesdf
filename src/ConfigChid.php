@@ -8,7 +8,7 @@ class ConfigChid
     {
         //测试域名，生产改为正式域名
         $domain = '';
-        //实际的项目地址，用于寻找私钥地址
+        //实际的项目地址，用于寻找私钥和公钥的存放地址
         $www = '';
         return [
             'balance_pay'=> $domain.'/pay/balance',
