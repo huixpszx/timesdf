@@ -1,6 +1,7 @@
 <?php
 
 namespace Timespay\Df;
+use Exception;
 
 class Method
 {
@@ -19,7 +20,7 @@ class Method
 
     }
 
-    public static function Send_post_from($url, $post_data)
+    public static function Send_post_form($url, $post_data)
     { //POST FROM格式
         $postdata = http_build_query($post_data);
         $options = array(
@@ -33,34 +34,26 @@ class Method
         $content = stream_context_create($options);
         return file_get_contents($url, false, $content);
     }
-    public static function httpGet($url, $headers = [], $cookies = [])
+
+    public static function verify ($formData,$appkey,$times_pubKey_path)
     {
-        $httpOptions = array(
-            'method' => 'GET',
-            'timeout' => 10,
-        );
+//        $formData = $_POST;
+        $sign_from = $formData['sign'];
+        unset($formData['sign']);
+        //加agent_key到数组
+        $formData['agent_key'] = $appkey;
 
-        if ($cookies) {
-            $ls = [];
-            foreach ($cookies as $k => $v) {
-                $ls[] = $k . '=' . $v;
-            }
-            $headers['Cookie'] = implode('; ', $ls);
+        //排序得到需要验证的字符串
+        $need_sign = BaseMethod::arrayToKv($formData);
+        //用我方公钥验证签名，不正确则直接退出
+        $result = BaseMethod::rsa_verify($need_sign,$sign_from,$times_pubKey_path);
+
+        //结果只有两种，true或者false
+        if($result){
+            return $result;
+        }else{
+            throw new Exception('回调验签不通过');
         }
-
-
-        if ($headers) {
-            $ls = [];
-            foreach ($headers as $k => $v) {
-                $ls[] = $k . ': ' . $v;
-            }
-            $httpOptions['header'] = $ls;
-        }
-
-        $options = array(
-            'http' => $httpOptions
-        );
-        $context = stream_context_create($options);
-        return @file_get_contents($url, false, $context);
     }
+
 }
